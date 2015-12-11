@@ -65,6 +65,10 @@ public class Book {
     }
   }
 
+  public int getId() {
+    return id;
+  }
+
   public long getIsbn() {
     return isbn;
   }
