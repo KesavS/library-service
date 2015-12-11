@@ -11,6 +11,7 @@
   <properties>
     <java.target.version>1.8</java.target.version>
     <java.source.version>1.8</java.source.version>
+    <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     <spring.version>4.2.3.RELEASE</spring.version>
     <jersey.version>2.22.1</jersey.version>
     <slf4j.version>1.7.13</slf4j.version>
@@ -121,4 +122,17 @@
     </dependencies>
   </dependencyManagement>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.plugin.version}</version>
+        <configuration>
+          <source>${java.source.version}</source>
+          <target>${java.target.version}</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

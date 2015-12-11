@@ -1,7 +1,7 @@
 package com.trenell.library.config;
 
 import com.trenell.library.dao.CrudDao;
-import com.trenell.library.dao.JdbcDao;
+import com.trenell.library.dao.BookJdbcDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -29,6 +29,6 @@ public class RepositoryConfig {
 
   @Bean
   public CrudDao bookDao(NamedParameterJdbcTemplate jdbcTemplate) {
-    return new JdbcDao(jdbcTemplate);
+    return new BookJdbcDao(jdbcTemplate);
   }
 }
