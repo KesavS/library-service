@@ -36,14 +36,22 @@ public class BookJdbcDao implements CrudDao<Book, Integer> {
     try {
       return jdbcTemplate.queryForObject(Queries.FIND_BY_ID.getQuery(), new MapSqlParameterSource("id", id), new BookRowMapper());
     } catch(DataAccessException e) {
-      LOGGER.error("An error has occurred while trying to retrieve book with and ID of " + id + " from the system: \n" + Throwables.getStackTraceAsString(e), e);
+      LOGGER.error("An error has occurred while trying to retrieve book with and ID of " + id +
+          " from the system: \n" + Throwables.getStackTraceAsString(e), e);
     }
 
     return new Book.BookBuilder(0).build();
   }
 
   public Book findByISBN(long isbn) {
-    return jdbcTemplate.queryForObject(Queries.FIND_BY_ISBN.getQuery(), new MapSqlParameterSource("isbn", isbn), new BookRowMapper());
+    try {
+      return jdbcTemplate.queryForObject(Queries.FIND_BY_ISBN.getQuery(), new MapSqlParameterSource("isbn", isbn), new BookRowMapper());
+    } catch(DataAccessException e) {
+      LOGGER.error("An error has occurred while trying to retrieve book with an ISBN of " + isbn +
+          " from the system: \n" + Throwables.getStackTraceAsString(e));
+    }
+
+    return new Book.BookBuilder(0).build();
   }
 
   @Override
@@ -53,7 +61,14 @@ public class BookJdbcDao implements CrudDao<Book, Integer> {
 
   @Override
   public int update(Book book) {
-    return executeUpdate(book, Queries.UPDATE.getQuery());
+    try {
+      return executeUpdate(book, Queries.UPDATE.getQuery());
+    } catch(DataAccessException e) {
+      LOGGER.error("An error has occurred while trying to update the following book\n" +
+          book.toString() + ": \n" + Throwables.getRootCause(e) + "\n" + Throwables.getStackTraceAsString(e), e);
+    }
+
+    return 0;
   }
 
   @Override
@@ -75,6 +90,7 @@ public class BookJdbcDao implements CrudDao<Book, Integer> {
 
   private SqlParameterSource createParameterMap(Book book) {
     return new MapSqlParameterSource("isbn", book.getIsbn())
+        .addValue("id", book.getId())
         .addValue("title", book.getTitle())
         .addValue("author", book.getAuthor())
         .addValue("pageCount", book.getPageCount());

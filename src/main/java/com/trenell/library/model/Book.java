@@ -19,12 +19,12 @@ public class Book {
 
   public static class BookBuilder {
     private int id = 0;
-    private final int isbn;
+    private final long isbn;
     private String title = "";
     private String author = "";
     private int pageCount = 0;
 
-    public BookBuilder(int isbn) {
+    public BookBuilder(long isbn) {
       this.isbn = isbn;
     }
 
